@@ -4,21 +4,21 @@ postal:
   # serviceAccount: postal
   role:
     create: true
-    # name: directus
+    # name: postal
   secret:
     create: true
-    # name: directus
+    # name: postal
   db:
+    host: mysql.mysql.svc.cluster.local
+    port: "3306"
     name: postal
     user: postal
     pass: changeme
-    host: mysql.mysql.svc.cluster.local
-    port: "3306"
   mq:
+    host: rabbitmq.rabbitmq.svc.cluster.local
     vhost: postal
     user: postal
     pass: changeme
-    host: rabbitmq.rabbitmq.svc.cluster.local
   nginx:
     image: nginx:1.13
 

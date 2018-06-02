@@ -1,4 +1,4 @@
-# directus-chart
+# postal-chart
 > A [Helm](https://www.helm.sh) Chart for
 > [Postal](https://github.com/atech/postal)
 
@@ -33,13 +33,13 @@ helm repo add appjumpstart https://appjumpstart.nyc3.digitaloceanspaces.com/char
 Install Postal:
 
 ```console
-helm install --name <release name> -f <config file> --set directus.db.pass=somepass appjumpstart/postal
+helm install --name <release name> -f <config file> --set postal.db.pass=somepass --set postal.mq.pass=somepass appjumpstart/postal
 ```
 
 ## Upgrading
 
 ```console
-helm upgrade <release name> appjumpstart/postal -f <config file> --set directus.db.pass=somepass
+helm upgrade <release name> appjumpstart/postal -f <config file> --set postal.db.pass=somepass --set postal.mq.pass=somepass
 ```
 
 &nbsp;

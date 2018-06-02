@@ -21,7 +21,22 @@ spec:
         release: {{ .Release.Name }}
     spec:
       serviceAccountName: {{ default (include "postal.fullname" .) .Values.postal.serviceAccount }}
+      volumes:
+        - name: nginx-conf
+          configMap:
+            name: {{ template "postal.fullname" . }}
+            items:
+              - key: nginx.conf
+        - name: assets
+          emptyDir: {}
       containers:
+        - name: {{ .Chart.Name }}-nginx
+          image: {{ .Values.postal.nginx.image }}
+          volumeMounts:
+            - name: nginx-conf
+              mountPath: /etc/nginx/nginx.conf
+            - name: assets
+              mountPath: /opt/postal/public
         - name: {{ .Chart.Name }}
           image: {{ .Values.postal.image }}
           ports:
@@ -49,11 +64,11 @@ spec:
                   name: {{ default (include "postal.fullname" .) .Values.postal.secret.name }}
                   key: db_pass
             - name: MQ_HOST
-              value: {{ .Values.postal.db.host }}
-            - name: MQ_NAME
-              value: {{ .Values.postal.db.name }}
+              value: {{ .Values.postal.mq.host }}
+            - name: MQ_VHOST
+              value: {{ .Values.postal.mq.vhost }}
             - name: MQ_USER
-              value: {{ .Values.postal.db.user }}
+              value: {{ .Values.postal.mq.user }}
             - name: MQ_PASS
               valueFrom:
                 secretKeyRef:
@@ -62,16 +77,3 @@ spec:
           volumeMounts:
             - name: assets
               mountPath: /opt/postal/public
-        - name: {{ .Chart.Name }}-nginx
-          image: {{ .Values.postal.nginx.image }}
-          volumeMounts:
-            - name: nginx-conf
-              mountPath: /etc/nginx/nginx.conf
-            - name: assets
-              mountPath: /opt/postal/public
-      volumes:
-        - name: nginx-conf
-          configMap:
-            name: {{ template "postal.fullname" . }}
-        - name: assets
-          emptyDir: {}

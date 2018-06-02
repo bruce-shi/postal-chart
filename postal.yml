@@ -1,21 +1,28 @@
-# This is just a values config file used for testing locally on Minikube.
-
-directus:
-  image: getdirectus/directus:6.4
-  # namespace: directus
-  # serviceAccount: directus
+postal:
+  image: appjumpstart/postal:b264c5b
+  # namespace: postal
+  # serviceAccount: postal
   role:
     create: true
-    # name: directus
+    # name: postal
   secret:
     create: true
-    # name: directus
+    # name: postal
   db:
-    name: directus
-    user: directus
-    host: kinchasa-mysql.default.svc.cluster.local
+    host: mysql.mysql.svc.cluster.local
     port: "3306"
+    name: postal
+    user: postal
+    pass: changeme
+  mq:
+    host: rabbitmq.rabbitmq.svc.cluster.local
+    vhost: postal
+    user: postal
+    pass: changeme
+  nginx:
+    image: nginx:1.13
 
-  # Change required:
+  # Change (probably) required:
   hosts:
-    - directus.local
+    - postal.local
+
