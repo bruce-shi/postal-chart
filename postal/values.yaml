@@ -1,0 +1,20 @@
+directus:
+  image: getdirectus/directus:6.4
+  # namespace: directus
+  # serviceAccount: directus
+  role:
+    create: true
+    # name: directus
+  secret:
+    create: true
+    # name: directus
+  db:
+    name: directus
+    user: directus
+    pass: directus
+    host: mysql.mysql.svc.cluster.local
+    port: "3306"
+
+  # Change (probably) required:
+  hosts:
+    - directus.local

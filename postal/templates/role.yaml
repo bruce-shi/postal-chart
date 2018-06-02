@@ -1,0 +1,18 @@
+{{- if .Values.directus.role.create -}}
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: Role
+metadata:
+  name: {{ template "directus.fullname" . }}
+  namespace: {{ default (include "directus.fullname" .) .Values.directus.namespace }}
+  labels:
+    app: {{ template "directus.name" . }}
+    chart: {{ template "directus.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    resourceNames:
+      - {{ default (include "directus.fullname" .) .Values.directus.secret.name }}
+    verbs: ["get"]
+{{- end }}

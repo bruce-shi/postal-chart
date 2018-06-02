@@ -1,0 +1,59 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  namespace: {{ default (include "directus.fullname" .) .Values.directus.namespace }}
+  name: {{ template "directus.fullname" . }}
+  labels:
+    app: {{ template "directus.name" . }}
+    chart: {{ template "directus.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ template "directus.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "directus.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      serviceAccountName: {{ default (include "directus.fullname" .) .Values.directus.serviceAccount }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: {{ .Values.directus.image }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          env:
+            - name: MYSQL_ENV_MYSQL_DATABASE
+              value: {{ .Values.directus.db.name }}
+            - name: MYSQL_USER
+              value: {{ .Values.directus.db.user }}
+            - name: MYSQL_ENV_MYSQL_USER
+              value: {{ .Values.directus.db.user }}
+            - name: MYSQL_PORT_3306_TCP_ADDR
+              value: {{ .Values.directus.db.host }}
+            - name: MYSQL_PORT_3306_TCP_PORT
+              value: {{ .Values.directus.db.port | quote }}
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ default (include "directus.fullname" .) .Values.directus.secret.name }}
+                  key: mysql_password
+            - name: MYSQL_ENV_MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ default (include "directus.fullname" .) .Values.directus.secret.name }}
+                  key: mysql_password

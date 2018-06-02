@@ -1,0 +1,19 @@
+{{- if .Values.directus.role.create -}}
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: RoleBinding
+metadata:
+  name: {{ template "directus.fullname" . }}
+  labels:
+    app: {{ template "directus.name" . }}
+    chart: {{ template "directus.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ default (include "directus.fullname" .) .Values.directus.role.name }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ default (include "directus.fullname" .) .Values.directus.serviceAccount }}
+    namespace: {{ default (include "directus.fullname" .) .Values.directus.namespace }}
+{{- end }}

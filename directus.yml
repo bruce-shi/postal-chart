@@ -1,0 +1,21 @@
+# This is just a values config file used for testing locally on Minikube.
+
+directus:
+  image: getdirectus/directus:6.4
+  # namespace: directus
+  # serviceAccount: directus
+  role:
+    create: true
+    # name: directus
+  secret:
+    create: true
+    # name: directus
+  db:
+    name: directus
+    user: directus
+    host: kinchasa-mysql.default.svc.cluster.local
+    port: "3306"
+
+  # Change required:
+  hosts:
+    - directus.local
