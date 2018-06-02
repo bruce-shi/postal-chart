@@ -1,7 +1,7 @@
-directus:
-  image: getdirectus/directus:6.4
-  # namespace: directus
-  # serviceAccount: directus
+postal:
+  image: appjumpstart/postal:b264c5b
+  # namespace: postal
+  # serviceAccount: postal
   role:
     create: true
     # name: directus
@@ -9,12 +9,17 @@ directus:
     create: true
     # name: directus
   db:
-    name: directus
-    user: directus
-    pass: directus
+    name: postal
+    user: postal
+    pass: changeme
     host: mysql.mysql.svc.cluster.local
     port: "3306"
+  mq:
+    vhost: postal
+    user: postal
+    pass: changeme
+    host: rabbitmq.rabbitmq.svc.cluster.local
 
   # Change (probably) required:
   hosts:
-    - directus.local
+    - postal.local

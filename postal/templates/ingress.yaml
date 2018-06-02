@@ -1,23 +1,23 @@
-{{- $fullname := include "directus.fullname" . -}}
+{{- $fullname := include "postal.fullname" . -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  namespace: {{ default $fullname .Values.directus.namespace }}
+  namespace: {{ default $fullname .Values.postal.namespace }}
   name: {{ $fullname }}
   labels:
-    app: {{ template "directus.name" . }}
-    chart: {{ template "directus.chart" . }}
+    app: {{ template "postal.name" . }}
+    chart: {{ template "postal.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
   tls:
     - hosts:
-      {{- range .Values.directus.hosts }}
+      {{- range .Values.postal.hosts }}
         - {{ . }}
       {{- end }}
       secretName: {{ $fullname }}-tls
   rules:
-  {{- range .Values.directus.hosts }}
+  {{- range .Values.postal.hosts }}
     - host: {{ . }}
       http:
         paths:

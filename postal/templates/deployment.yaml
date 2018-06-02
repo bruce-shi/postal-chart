@@ -1,32 +1,32 @@
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  namespace: {{ default (include "directus.fullname" .) .Values.directus.namespace }}
-  name: {{ template "directus.fullname" . }}
+  namespace: {{ default (include "postal.fullname" .) .Values.postal.namespace }}
+  name: {{ template "postal.fullname" . }}
   labels:
-    app: {{ template "directus.name" . }}
-    chart: {{ template "directus.chart" . }}
+    app: {{ template "postal.name" . }}
+    chart: {{ template "postal.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ template "directus.name" . }}
+      app: {{ template "postal.name" . }}
       release: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: {{ template "directus.name" . }}
+        app: {{ template "postal.name" . }}
         release: {{ .Release.Name }}
     spec:
-      serviceAccountName: {{ default (include "directus.fullname" .) .Values.directus.serviceAccount }}
+      serviceAccountName: {{ default (include "postal.fullname" .) .Values.postal.serviceAccount }}
       containers:
         - name: {{ .Chart.Name }}
-          image: {{ .Values.directus.image }}
+          image: {{ .Values.postal.image }}
           ports:
             - name: http
-              containerPort: 8080
+              containerPort: 80
               protocol: TCP
           livenessProbe:
             httpGet:
@@ -37,23 +37,26 @@ spec:
               path: /
               port: http
           env:
-            - name: MYSQL_ENV_MYSQL_DATABASE
-              value: {{ .Values.directus.db.name }}
-            - name: MYSQL_USER
-              value: {{ .Values.directus.db.user }}
-            - name: MYSQL_ENV_MYSQL_USER
-              value: {{ .Values.directus.db.user }}
-            - name: MYSQL_PORT_3306_TCP_ADDR
-              value: {{ .Values.directus.db.host }}
-            - name: MYSQL_PORT_3306_TCP_PORT
-              value: {{ .Values.directus.db.port | quote }}
-            - name: MYSQL_PASSWORD
+            - name: DB_HOST
+              value: {{ .Values.postal.db.host }}
+            - name: DB_NAME
+              value: {{ .Values.postal.db.name }}
+            - name: DB_USER
+              value: {{ .Values.postal.db.user }}
+            - name: DB_PASS
               valueFrom:
                 secretKeyRef:
-                  name: {{ default (include "directus.fullname" .) .Values.directus.secret.name }}
-                  key: mysql_password
-            - name: MYSQL_ENV_MYSQL_PASSWORD
+                  name: {{ default (include "postal.fullname" .) .Values.postal.secret.name }}
+                  key: db_pass
+            - name: MQ_HOST
+              value: {{ .Values.postal.db.host }}
+            - name: MQ_NAME
+              value: {{ .Values.postal.db.name }}
+            - name: MQ_USER
+              value: {{ .Values.postal.db.user }}
+            - name: MQ_PASS
               valueFrom:
                 secretKeyRef:
-                  name: {{ default (include "directus.fullname" .) .Values.directus.secret.name }}
-                  key: mysql_password
+                  name: {{ default (include "postal.fullname" .) .Values.postal.secret.name }}
+                  key: mq_pass
+        - name: {{ .Chart.Name }}-nginx

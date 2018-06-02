@@ -1,4 +1,4 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: {{ default (include "directus.fullname" .) .Values.directus.namespace }}
+  name: {{ default (include "postal.fullname" .) .Values.postal.namespace }}
