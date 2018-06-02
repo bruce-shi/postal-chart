@@ -19,6 +19,8 @@ postal:
     user: postal
     pass: changeme
     host: rabbitmq.rabbitmq.svc.cluster.local
+  nginx:
+    image: nginx:1.13
 
   # Change (probably) required:
   hosts:

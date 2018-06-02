@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: {{ default (include "postal.fullname" .) .Values.postal.namespace }}
+  name: {{ template "postal.fullname" . }}
+data:
+  nginx.conf: {{ Files.Get "nginx.conf" }}

@@ -59,4 +59,19 @@ spec:
                 secretKeyRef:
                   name: {{ default (include "postal.fullname" .) .Values.postal.secret.name }}
                   key: mq_pass
+          volumeMounts:
+            - name: assets
+              mountPath: /opt/postal/public
         - name: {{ .Chart.Name }}-nginx
+          image: {{ .Values.postal.nginx.image }}
+          volumeMounts:
+            - name: nginx-conf
+              mountPath: /etc/nginx/nginx.conf
+            - name: assets
+              mountPath: /opt/postal/public
+      volumes:
+        - name: nginx-conf
+          configMap:
+            name: {{ template "postal.fullname" . }}
+        - name: assets
+          emptyDir: {}
