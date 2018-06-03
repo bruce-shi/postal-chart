@@ -4,4 +4,5 @@ metadata:
   namespace: {{ default (include "postal.fullname" .) .Values.postal.namespace }}
   name: {{ template "postal.fullname" . }}
 data:
-  nginx.conf: {{ Files.Get "nginx.conf" }}
+  nginx.conf: |-
+{{ .Files.Get "nginx.conf" | indent 4 }}
