@@ -121,6 +121,6 @@ ssl:
 #      -----END RSA PRIVATE KEY-----
 
 
+mysqlDatabase: postal
 mysqlUser: postal
 mysqlPassword: Ou812
-mysqlDatabase: postal

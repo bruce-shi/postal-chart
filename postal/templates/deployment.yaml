@@ -21,14 +21,6 @@ spec:
         release: {{ .Release.Name }}
     spec:
       serviceAccountName: {{ default (include "postal.fullname" .) .Values.postal.serviceAccount }}
-      volumes:
-        - name: nginx-conf
-          configMap:
-            name: {{ template "postal.fullname" . }}
-            items:
-              - key: nginx.conf
-        - name: assets
-          emptyDir: {}
       containers:
         - name: {{ .Chart.Name }}-nginx
           image: {{ .Values.postal.nginx.image }}
@@ -77,3 +69,12 @@ spec:
           volumeMounts:
             - name: assets
               mountPath: /opt/postal/public
+      volumes:
+        - name: nginx-conf
+          configMap:
+            name: {{ template "postal.fullname" . }}
+            items:
+              - key: nginx.conf
+                path: nginx.conf
+        - name: assets
+          emptyDir: {}
